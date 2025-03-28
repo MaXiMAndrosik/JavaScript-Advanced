@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Task 1</title>
+</head>
+
+<body>
+
+	<button class="load-button">Загрузить новости</button>
+	<div class="news-container"></div>
+
+	<script>
+
+		const loadButton = document.querySelector(".load-button");
+		const container = document.querySelector(".news-container");
+
+		const mockDatabase = [
+			{ title: "Новость 1", content: "Содержание новости 1" },
+			{ title: "Новость 2", content: "Содержание новости 2" },
+		];
+
+		let fetchNews = () => {
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					const articleData = Math.random() < 0.1 ? reject("Произошла ошибка получения данных") : resolve(mockDatabase);
+				}, 2000);
+			});
+		};
+
+		loadButton.addEventListener("click", () => {
+			loadButton.style.display = "none";
+			fetchNews()
+				.then((data) => {
+					for (let news of data) {
+						const title = document.createElement("h3");
+						title.classList.add("title");
+						title.textContent = news.title;
+
+						container.appendChild(title);
+
+						const article = document.createElement("p");
+						article.classList.add("article");
+						article.textContent = news.content;
+
+						container.appendChild(article);
+					}
+					setTimeout(() => (loadButton.style.display = "block"), 500);
+				})
+				.catch((error) => {
+					container.textContent = error;
+				});
+		});
+		
+	</script>
+
+</body>
+
+</html>

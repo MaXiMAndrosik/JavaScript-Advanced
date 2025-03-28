@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Task 3</title>
+</head>
+
+<body>
+	<div>
+		<label for="table">Выберите стол:</label>
+		<select id="table">
+			<option value="oak">Дуб</option>
+			<option value="pine">Сосна</option>
+			<option value="walnut">Орех</option>
+		</select>
+	</div>
+
+	<div>
+		<label for="chair">Выберите стул:</label>
+		<select id="chair">
+			<option value="leather">Кожа</option>
+			<option value="fabric">Ткань</option>
+			<option value="plastic">Пластик</option>
+		</select>
+	</div>
+
+	<div>
+		<label for="sofa">Выберите диван:</label>
+		<select id="sofa">
+			<option value="modern">Современный</option>
+			<option value="classic">Классический</option>
+			<option value="rustic">Деревенский</option>
+		</select>
+	</div>
+
+	<button id="save">Сохранить комплект</button>
+	<button id="clear">Очистить настройки</button>
+
+	<div id="result"></div>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const loadSettings = () => {
+				const loadedSettings = localStorage.getItem("furnitureSet");
+
+				if (loadedSettings) {
+					const settings = JSON.parse(loadedSettings);
+					document.querySelector("#table").value = settings.tableType;
+					document.querySelector("#chair").value = settings.chairType;
+					document.querySelector("#sofa").value = settings.sofaType;
+				}
+			};
+			loadSettings();
+
+			document.querySelector("#save").addEventListener("click", (e) => {
+				const furnitureSet = {
+					tableType: document.querySelector("#table").value,
+					chairType: document.querySelector("#chair").value,
+					sofaType: document.querySelector("#sofa").value,
+				};
+
+				localStorage.setItem("furnitureSet", JSON.stringify(furnitureSet));
+
+				let tableType = null;
+				let chairType = null;
+				let sofaType = null;
+
+				const allSelects = document.querySelectorAll("select");
+
+				allSelects.forEach((select) => {
+					if (select.id === "table") {
+						if (select.value === "oak") {
+							tableType = "Дуб";
+						} else if (select.value === "pine") {
+							tableType = "Сосна";
+						} else {
+							tableType = "Орех";
+						}
+					} else if (select.id === "chair") {
+						if (select.value === "leather") {
+							chairType = "Кожа";
+						} else if (select.value === "fabric") {
+							chairType = "Ткань";
+						} else {
+							chairType = "Пластик";
+						}
+					} else if (select.id === "sofa") {
+						if (select.value === "modern") {
+							sofaType = "Современный";
+						} else if (select.value === "classic") {
+							sofaType = "Классический";
+						} else {
+							sofaType = "Деревенский";
+						}
+					}
+				});
+
+				document.querySelector("#result").textContent = `Стол: ${tableType}, Стул: ${chairType}, Софа: ${sofaType}`;
+			});
+
+			document.querySelector("#clear").addEventListener("click", (e) => {
+				const settingsFromStorage = localStorage.getItem("furnitureSet");
+				localStorage.removeItem("furnitureSet");
+
+				const loadDefaultSettings = () => {
+					const defaultSettings = {
+						tableType: "oak",
+						chairType: "leather",
+						sofaType: "modern",
+					};
+
+					document.querySelector("#table").value = defaultSettings.tableType;
+					document.querySelector("#chair").value = defaultSettings.chairType;
+					document.querySelector("#sofa").value = defaultSettings.sofaType;
+				};
+
+				loadDefaultSettings();
+
+				document.querySelector("#result").textContent = "Выбор не сделан. Все предыдущие настройки удалены";
+			});
+		});
+		
+	</script>
+
+</body>
+
+</html>

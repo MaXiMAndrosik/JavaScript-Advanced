@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Task 2</title>
+</head>
+
+<body>
+
+	<div class="text"></div>
+	<input type="text" class="input-text" placeholder="Введите текст" />
+	<button class="save">Сохранить</button>
+	<button class="load">Загрузить</button>
+	<button class="clear">Очистить</button>
+
+	<script>
+		
+		const textArea = document.querySelector(".text");
+		const inputPlace = document.querySelector(".input-text");
+		const buttons = document.querySelectorAll("button");
+
+		buttons.forEach((button) => {
+			button.addEventListener("click", (e) => {
+				if (event.target.classList.contains("save")) {
+					if (inputPlace.value !== "") {
+						localStorage.setItem("seminarText", JSON.stringify(inputPlace.value));
+						alert("Текст сохранен");
+					} else {
+						alert("Введите текст!");
+					}
+				} else if (event.target.classList.contains("load")) {
+					const dataFromStorage = JSON.parse(localStorage.getItem("seminarText"));
+					const newText = document.createElement("p");
+
+					if (dataFromStorage) {
+						newText.textContent = dataFromStorage;
+					} else {
+						alert("Сохраненных сообщений нет.");
+					}
+
+					textArea.appendChild(newText);
+				} else if (event.target.classList.contains("clear")) {
+					if (textArea.hasChildNodes()) {
+						textArea.replaceChildren();
+					}
+					localStorage.removeItem("seminarText");
+					alert("Хранилище сообщений очищено");
+				}
+			});
+		});
+	</script>
+
+</body>
+
+</html>
